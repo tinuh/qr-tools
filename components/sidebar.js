@@ -1,7 +1,8 @@
 import React from "react";
 import { Box, Button, Stack, Heading } from "@chakra-ui/react";
+import NextLink from "next/link";
 
-export default function sidebar() {
+export default function Sidebar() {
   return (
     <Box
       maxW="xs"
@@ -15,9 +16,15 @@ export default function sidebar() {
         <Heading size="lg" align="center" pb={3}>
           QR Tools
         </Heading>
-        <Button>Links/Emails</Button>
-        <Button>Survey</Button>
-        <Button>Form/Attendance</Button>
+        <NextLink href = "/links" passHref>
+          <Button>Links/Emails</Button>
+        </NextLink>
+        <NextLink href = "/survey" passHref>
+          <Button>Survey</Button>
+        </NextLink>
+        <NextLink href = "/forms" passHref>
+          <Button>Form/Attendance</Button>
+        </NextLink>
       </Stack>
     </Box>
   );

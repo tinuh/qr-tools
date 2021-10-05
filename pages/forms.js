@@ -10,8 +10,8 @@ import {
   FormHelperText,
 } from "@chakra-ui/react";
 
-export default function Home() {
-  const [link, setLink] = React.useState("");
+export default function Survey() {
+  const [link, setLink] = React.useState("https://qr.tinu.tech/f/");
 
   const handleLink = (event) => {
     setLink(event.target.value);
@@ -21,8 +21,8 @@ export default function Home() {
     <Flex>
       <Box minW="lg" w="50%" m = {10}>
         <FormControl id="link">
-          <FormLabel>Home Page</FormLabel>
-          <Input value = {link} type="link" onChange={handleLink}/>
+          <FormLabel>Form Name</FormLabel>
+          <Input type="link"/>
           <FormHelperText>We won&apos;t store it anywhere</FormHelperText>
         </FormControl>
       </Box>

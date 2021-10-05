@@ -21,7 +21,7 @@ export default function Home() {
     <Flex>
       <Box minW="lg" w="50%" m = {10}>
         <FormControl id="link">
-          <FormLabel>Home Page</FormLabel>
+          <FormLabel>Link</FormLabel>
           <Input value = {link} type="link" onChange={handleLink}/>
           <FormHelperText>We won&apos;t store it anywhere</FormHelperText>
         </FormControl>

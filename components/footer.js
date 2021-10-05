@@ -51,9 +51,9 @@ export default function FooterComponent() {
               <NextLink href="/survey" passHref>
                 <Link>Survey</Link>
               </NextLink>
-              <Link href="/forms" isExternal>
-                Form/Attendance
-              </Link>
+              <NextLink href="/forms" passHref>
+                <Link>Form/Attendance</Link>
+              </NextLink>
             </Stack>
           </Stack>
 
