@@ -4,11 +4,9 @@ import NextLink from "next/link";
 import {
   Container,
   Stack,
-  SimpleGrid,
   Text,
   Heading,
   Link,
-  Image,
   Flex,
   useColorModeValue,
 } from "@chakra-ui/react";
@@ -37,7 +35,7 @@ export default function FooterComponent() {
           spacing={{ base: 12, md: 24, lg: 36 }}
           fontSize="lg"
         >
-          {/* LINKS */}
+          {/* Links */}
           <Stack direction="row" spacing={3}>
             <Stack direction="column" spacing={3} flex={1} w={36}>
               <Heading
@@ -47,13 +45,13 @@ export default function FooterComponent() {
               >
                 Tools
               </Heading>
-              <NextLink href="/team" passHref>
+              <NextLink href="/links" passHref>
                 <Link>Links/Emails</Link>
               </NextLink>
-              <NextLink href="/team/join" passHref>
+              <NextLink href="/survey" passHref>
                 <Link>Survey</Link>
               </NextLink>
-              <Link href="https://hackclub.com/slack" isExternal>
+              <Link href="/forms" isExternal>
                 Form/Attendance
               </Link>
             </Stack>

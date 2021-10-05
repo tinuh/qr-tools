@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, Stack } from "@chakra-ui/react";
+import { Box, Button, Stack, Heading } from "@chakra-ui/react";
 
 export default function sidebar() {
   return (
@@ -12,6 +12,9 @@ export default function sidebar() {
       p={5}
     >
       <Stack>
+        <Heading size="lg" align="center" pb={3}>
+          QR Tools
+        </Heading>
         <Button>Links/Emails</Button>
         <Button>Survey</Button>
         <Button>Form/Attendance</Button>
