@@ -24,7 +24,7 @@ export default function Home() {
         <FormControl id="link">
           <FormLabel>Link</FormLabel>
           <Input value = {link} type="link" onChange={handleLink}/>
-          <FormHelperText>We won't store it anywhere</FormHelperText>
+          <FormHelperText>We won&apos;t store it anywhere</FormHelperText>
         </FormControl>
       </Box>
       <Box m="10">
