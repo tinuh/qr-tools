@@ -1,10 +1,14 @@
 import React from "react";
 import { Box, Button, Stack, Heading } from "@chakra-ui/react";
 import NextLink from "next/link";
+import { useRouter } from 'next/router'
 
 export default function Sidebar() {
+  const router = useRouter();
+
   return (
     <Box
+      className = "min-w-full"
       maxW="xs"
       borderWidth="3px"
       borderRadius="lg"
@@ -17,13 +21,13 @@ export default function Sidebar() {
           QR Tools
         </Heading>
         <NextLink href = "/links" passHref>
-          <Button>Links/Emails</Button>
+          <Button variant = {router.pathname === "/links" ? "solid" : "outline"} colorScheme= "blue">Links/Emails</Button>
         </NextLink>
-        <NextLink href = "/survey" passHref>
-          <Button>Survey</Button>
+        <NextLink href = "/poll" passHref>
+          <Button variant = {router.pathname === "/poll" ? "solid" : "outline"} colorScheme= "blue">Poll</Button>
         </NextLink>
         <NextLink href = "/forms" passHref>
-          <Button>Form/Attendance</Button>
+          <Button variant = {router.pathname === "/forms" ? "solid" : "outline"} colorScheme= "blue">Form/Attendance</Button>
         </NextLink>
       </Stack>
     </Box>

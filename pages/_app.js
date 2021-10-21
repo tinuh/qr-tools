@@ -1,11 +1,16 @@
+import 'tailwindcss/tailwind.css'
 import "../styles/globals.css";
 import Head from "next/head";
 import { ChakraProvider, Flex, Box } from "@chakra-ui/react";
 import theme from "../styles/theme";
 import Footer from "../components/footer";
 import SideBar from "../components/sidebar";
+import { useRouter } from "next/router";
+
 
 function MyApp({ Component, pageProps }) {
+  const router = useRouter();
+
   return (
     <>
       <Head>
@@ -18,15 +23,17 @@ function MyApp({ Component, pageProps }) {
       </Head>
 
       <ChakraProvider theme={theme} resetCSS>
-        <Flex>
-          <Box w = "25%">
-            <SideBar/>
-          </Box>
-          <Box>
+        <div className="flex flex-wrap">
+          <div className = "flex-initial md:min-w-1/4 pl-10 pr-10">
+            <SideBar />
+          </div>
+          <div className = "flex-1">
             <Component {...pageProps}/>
-          </Box>
-        </Flex>
-        <Footer/>
+          </div>
+        </div>
+        <div className = "fixed bottom-0 min-w-full">
+          <Footer/>
+        </div>
       </ChakraProvider>
     </>
   );

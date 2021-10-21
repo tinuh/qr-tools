@@ -48,8 +48,8 @@ export default function FooterComponent() {
               <NextLink href="/links" passHref>
                 <Link>Links/Emails</Link>
               </NextLink>
-              <NextLink href="/survey" passHref>
-                <Link>Survey</Link>
+              <NextLink href="/poll" passHref>
+                <Link>Poll</Link>
               </NextLink>
               <NextLink href="/forms" passHref>
                 <Link>Form/Attendance</Link>

@@ -18,7 +18,7 @@ export default function Home() {
   }
 
   return (
-    <Flex>
+    <div className = "flex">
       <Box minW="lg" w="50%" m = {10}>
         <FormControl id="link">
           <FormLabel>Home Page</FormLabel>
@@ -29,6 +29,6 @@ export default function Home() {
       <Box m="10">
         <QRCode value={link} />
       </Box>
-    </Flex>
+    </div>
   );
 }
