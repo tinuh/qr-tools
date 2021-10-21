@@ -8,18 +8,20 @@ import {
   FormLabel,
   Input,
   Button,
-  FormHelperText,
-	Tooltip
+  FormErrorMessage,
+  Tooltip
 } from "@chakra-ui/react";
+import { useForm } from "react-hook-form";
 
 export default function Survey() {
   const [link, setLink] = React.useState("");
-	const [published, setPub] = React.useState(false);
-	const [pollMeta, setMeta] = React.useState({});
+  const [published, setPub] = React.useState(false);
 
-  const handleLink = (event) => {
-    setLink(event.target.value);
-  };
+  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+
+  const onSubmit = (data) => {
+    publish(data);
+  }
 
   React.useEffect(() => {
     const fn = async () => {
@@ -29,8 +31,8 @@ export default function Survey() {
     fn();
   }, []);
 
-  const publish = () => {
-		setPub(true);
+  const publish = (metaData) => {
+    setPub(true);
     const peer = new Peer();
 
     peer.on("open", function (id) {
@@ -39,39 +41,49 @@ export default function Survey() {
     });
 
     peer.on("connection", async (conn) => {
-			await console.log("Connected to peer: ", conn.peer)
-			await conn.send("This is the example question.");
+      console.log("Connected to peer: ", conn.peer)
+
+      conn.on("open", () => {
+        console.log(metaData);
+        conn.send(metaData);
+      })
 
       conn.on("data", (data) => {
         console.log("Received", data);
       });
-		
+
     });
   };
 
   return (
     <Flex>
       <Box minW="lg" w="50%" m={10}>
-        <FormControl id="link">
-          <FormLabel>Poll Question</FormLabel>
-					<div className = "flex">
-						<div className = "pr-3 flex-auto">
-							<Input disabled = {published} type="link"/> 
-						</div>
-						<Tooltip label = "Add Answer Choice">
-							<Button>+</Button>
-						</Tooltip>
-					</div>
-          <FormHelperText>We won&apos;t store it anywhere</FormHelperText>
-          <Button disabled = {published} onClick={publish} colorScheme="teal">
-            {" "}
-            Create Poll
-          </Button>
-        </FormControl>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <FormControl id="link" isInvalid={errors.name}>
+            <FormLabel>Poll Question</FormLabel>
+            <div className="flex">
+              <div className="pr-3 flex-auto">
+                <Input id = "question" placeholder = "Question" {...register("question", {
+                  required: "This is required",
+                  minLength: { value: 4, message: "Minimum length should be 4" }
+                })} disabled={published} type="link" />
+              </div>
+              <Tooltip label="Add Answer Choice">
+                <Button>+</Button>
+              </Tooltip>
+            </div>
+            <FormErrorMessage>
+              {errors.name && errors.name.message}
+            </FormErrorMessage>
+            <Button disabled={published} type="submit" colorScheme="teal">
+              Create Poll
+            </Button>
+          </FormControl>
+        </form>
       </Box>
       <Box m="10">
-        <QRCode value={link} />
-        {link}
+        {link && <QRCode value={link} />}
+        {link && link}
       </Box>
     </Flex>
   );
