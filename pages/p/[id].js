@@ -42,7 +42,7 @@ export default function Survey() {
 
 			});
 		}
-	}, [peerImp])
+	}, [peerImp, id])
 
 
 

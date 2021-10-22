@@ -100,7 +100,7 @@ export default function Survey() {
           
           <br/>
           {choices.map((val, key) => 
-            <FormControl>
+            <FormControl key = {key}>
               <FormLabel>Choice {key+1}</FormLabel>
 
               <div className="flex">
