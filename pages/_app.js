@@ -31,9 +31,10 @@ function MyApp({ Component, pageProps }) {
             <Component {...pageProps}/>
           </div>
         </div>
-        <div className = "fixed bottom-0 min-w-full">
+
+        {(router.pathname === "/poll" || router.pathname === "/forms" || router.pathname === "/links") && <div className = "fixed bottom-0 min-w-full">
           <Footer/>
-        </div>
+        </div>}
       </ChakraProvider>
     </>
   );

@@ -20,11 +20,7 @@ export default function Home() {
   return (
     <div className = "flex">
       <Box minW="lg" w="50%" m = {10}>
-        <FormControl id="link">
-          <FormLabel>Home Page</FormLabel>
-          <Input value = {link} type="link" onChange={handleLink}/>
-          <FormHelperText>We won&apos;t store it anywhere</FormHelperText>
-        </FormControl>
+        QR Tools
       </Box>
       <Box m="10">
         <QRCode value={link} />
