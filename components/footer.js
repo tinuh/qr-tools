@@ -15,7 +15,8 @@ import ColorModeToggle from "./ColorModeToggle";
 export default function FooterComponent() {
   return (
     <Flex
-      as="nav"
+      p = {4}
+      as="footer"
       align="center"
       justify="space-between"
       wrap="wrap"
@@ -23,76 +24,17 @@ export default function FooterComponent() {
       color="white"
       bg="#2a4365"
     >
-      <Container
-        as="footer"
-        maxW="container.xl"
-        px={{ base: 8, md: 16 }}
-        py={{ base: 6, md: 12 }}
-        color="brand.muted"
-      >
-        <Stack
-          direction={{ base: "column", md: "row" }}
-          spacing={{ base: 12, md: 24, lg: 36 }}
-          fontSize="lg"
-        >
-          {/* Links */}
-          <Stack direction="row" spacing={3}>
-            <Stack direction="column" spacing={3} flex={1} w={36}>
-              <Heading
-                mb={1}
-                size="md"
-                color={useColorModeValue("gray.500", "gray.400")}
-              >
-                Tools
-              </Heading>
-              <NextLink href="/links" passHref>
-                <Link>Links/Emails</Link>
-              </NextLink>
-              <NextLink href="/poll" passHref>
-                <Link>Poll</Link>
-              </NextLink>
-              <NextLink href="/forms" passHref>
-                <Link>Form/Attendance</Link>
-              </NextLink>
-            </Stack>
-          </Stack>
-
-          {/* Contact */}
-          <Stack direction="column" spacing={3} w="auto">
-            <Stack direction="column" spacing={1}>
-              <Heading
-                mb={1}
-                size="md"
-                color={useColorModeValue("gray.500", "gray.400")}
-              >
-                Contact
-              </Heading>
-              <Link isExternal href="https://tinu.tech">
-                Personal Website
-              </Link>
-              <Link isExternal href="mailto:tinu@tinu.tech">
-                tinu@tinu.tech
-              </Link>
-            </Stack>
-          </Stack>
-
-          <Stack direction="column" spacing={3} w="auto">
-            <Stack direction="column" spacing={1}>
-              <ColorModeToggle
-                color={useColorModeValue("brand.blue", "brand.black")}
-              />
-            </Stack>
-          </Stack>
-        </Stack>
-
-        {/* COPYRIGHT */}
-        <Text mt={6}>
-          &copy; 2021{" "}
+      <Flex align="center" direction={{ base: "column", md: "row" }}>
+        <Text m={2} color="gray.400">&copy; 2021 &nbsp;
           <Link isExternal href="https://tinu.tech">
-            Tinu Vanapamula
+              Tinu Vanapamula
           </Link>
         </Text>
-      </Container>
+
+      </Flex>
+      <Stack m={2} spacing={4} direction="row" justify="center" align="center">
+        <ColorModeToggle color={useColorModeValue("brand.700", "white")}/>
+      </Stack>
     </Flex>
   );
 }
