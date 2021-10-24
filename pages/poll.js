@@ -1,5 +1,4 @@
 import React from "react";
-import Head from "next/head";
 import { QRCode } from "react-qrcode-logo";
 import {
   Flex,
@@ -12,10 +11,14 @@ import {
   Tooltip,
   Heading,
   Select,
-  ButtonGroup
+  ButtonGroup,
+  Slider,
+  SliderFilledTrack,
+  SliderTrack,
+  SliderThumb
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-import { Bar, Pie } from "react-chartjs-2";
+import { Bar, Bubble, Pie } from "react-chartjs-2";
 
 export default function Survey() {
   const [link, setLink] = React.useState("");
@@ -23,8 +26,10 @@ export default function Survey() {
   const [choices, setChoices] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [resData, setResData] = React.useState({});
+  const [freeData, setFreeData] = React.useState([]);
   const [metaData, setMetaData] = React.useState({});
   const [chartType, setChart] = React.useState('pie');
+  const [qrSize, setQrSize] = React.useState(150);
 
   const {
     register,
@@ -86,13 +91,17 @@ export default function Survey() {
   const onData = (data) => {
     if (data.type === "multiple" || data.type === "single") {
       console.log(resData);
-      Object.keys(data.data).map(function (key, index) {
+      Object.keys(data.data).map(function (key) {
         if (data.data[key]) {
-          console.log(key);
           setResData((prevState) => {
-            return { ...prevState, [key]: prevState[key] + 1 };
+            return {...prevState, [key]: prevState[key] + 1 };
           });
         }
+      });
+    }
+    else if (data.type === "free"){
+      setFreeData((prevData) => {
+        return [...prevData, data.data];
       });
     }
   };
@@ -134,7 +143,7 @@ export default function Survey() {
   };
 
   return (
-    <Flex>
+    <div className = "flex">
       <Box minW="lg" w="50%" m={10}>
         {(!published || loading) && (
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -162,7 +171,7 @@ export default function Survey() {
 
             <div className="flex mt-5">
               <div className="pr-3 flex-auto">
-                <Select {...register("type")} defaultValue="multiple">
+                <Select {...register("type")} defaultValue="single" disabled = {published}>
                   <option value="single">Single Choice</option>
                   <option value="multiple">Multiple Choice</option>
                   <option value="free">Free Response</option>
@@ -214,18 +223,28 @@ export default function Survey() {
           </form>
         )}
         {published && !loading && (
-          <div>
+          <div className = "grid justify-items-center">
             <Heading size="lg" align="center">
               {metaData.question}
             </Heading>
-            <div className="mt-10 w-2/3">
-              <ButtonGroup isAttached>
-                <Button mr="-px" onClick = {() => setChart('pie')}>Pie</Button>
-                <Button onClick = {() => setChart('bar')}>Bar</Button>
-              </ButtonGroup>
-              {chartType === 'pie' && <Pie data={graphData} />}
-              {chartType === 'bar' && <Bar data={graphData} />}
-            </div>
+            {(metaData.type === "single" || metaData.type === "multiple") && 
+              <div className="mt-10 w-2/3 text-center">
+                <ButtonGroup isAttached mb={5}>
+                  <Button mr="-px" onClick = {() => setChart('pie')}>Pie</Button>
+                  <Button onClick = {() => setChart('bar')}>Bar</Button>
+                </ButtonGroup>
+                {chartType === 'pie' && <Pie data={graphData} />}
+                {chartType === 'bar' && <Bar data={graphData} />}
+              </div>}
+            {metaData.type === "free" && 
+              <div>
+                <div className = "flex flex-wrap mt-5">
+                {freeData.map((res, key) => 
+                  <Box className = "p-3 m-3 flex-auto text-center" key = {key} borderWidth = "2px" borderRadius="lg">
+                    {res}
+                  </Box>)}
+                </div>
+              </div>}
           </div>
         )}
       </Box>
@@ -236,12 +255,20 @@ export default function Survey() {
           </Heading>
         )}
         {published && !loading && (
-          <div>
-            <QRCode value={link} />
+          <Box align = "center">
+            <QRCode value={link} size = {qrSize} /><br />
+
+            <Slider aria-label="slider-ex-1" defaultValue={150} min={100} max={300} onChange={(val) => setQrSize(val)}>
+              <SliderTrack>
+                <SliderFilledTrack />
+              </SliderTrack>
+              <SliderThumb />
+            </Slider><br />
+
             <p>{link}</p>
-          </div>
+          </Box>
         )}
       </Box>
-    </Flex>
+    </div>
   );
 }

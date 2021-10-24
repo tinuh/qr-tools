@@ -1,6 +1,15 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { Button, Heading, Box, Checkbox } from '@chakra-ui/react';
+import { 
+	Button, 
+	Heading, 
+	Box, 
+	Checkbox, 
+	RadioGroup, 
+	Radio, 
+	FormControl,
+	Input 
+} from '@chakra-ui/react';
 
 export default function Survey() {
 	const router = useRouter();
@@ -10,6 +19,8 @@ export default function Survey() {
 	const [meta, setMeta] = React.useState({});
 	const [conn, setConn] = React.useState();
 	const [chosen, setChosen] = React.useState({});
+	const [radio, setRadio] = React.useState("");
+	const [freeText, setFreeText] = React.useState("");
 
 	React.useEffect(() => {
 		const fn = async () => {
@@ -54,8 +65,27 @@ export default function Survey() {
 		setChosen(temp);
 	}
 
+	const radioSelect = (val) => {
+		setRadio(val);
+	}
+
+	const updateFreeText = (e) => {
+		setFreeText(e.target.value);
+	}
+
 	const submit = () => {
-		conn.send({type: meta.type, data: chosen});
+		let temp;
+		if (meta.type === "free"){
+			if (freeText === "") return;
+			temp = freeText;
+		}
+		else {
+			temp = {...chosen}
+			if (meta.type === "single"){
+				temp[radio] = true;
+			}
+		}
+		conn.send({type: meta.type, data: temp});
 	}
 
 	return (
@@ -68,19 +98,44 @@ export default function Survey() {
 				<Heading size="lg" align="center">{meta.question}</Heading>
 
 				{meta.type === "multiple" && 
-				<div className="flex flex-wrap">
-					{meta.choices.map((choice, key) => (
-						<div key={key} className = "flex-1">
-							<Box borderWidth="3px" borderRadius="lg" m = {5} borderColor = {chosen[choice] ? "blue.600" : "default"}>
-								<Button h = {70} isFullWidth justifyContent="flex-start" variant = "ghost" onClick = {() => select(choice, !chosen[choice])}>
-									<Box>
-										<Checkbox onChange = {() => select(choice, chosen[choice])} isChecked = {chosen[choice]}>{choice}</Checkbox>
-									</Box>
-								</Button>
-							</Box>
+					<div className="flex flex-wrap">
+						{meta.choices.map((choice, key) => (
+							<div key={key} className = "flex-1">
+								<Box borderWidth="3px" borderRadius="lg" m = {5} borderColor = {chosen[choice] ? "blue.600" : "default"}>
+									<Button h = {70} isFullWidth justifyContent="flex-start" variant = "ghost" onClick = {() => select(choice, !chosen[choice])}>
+										<Box>
+											<Checkbox onChange = {() => select(choice, chosen[choice])} isChecked = {chosen[choice]}>{choice}</Checkbox>
+										</Box>
+									</Button>
+								</Box>
+							</div>
+						))}
+					</div>}
+				
+				{meta.type === "single" && 
+					<RadioGroup value = {radio}>
+						<div className="flex flex-wrap">
+								{meta.choices.map((choice, key) => (
+									<div key={key} className = "flex-1">
+										<Box borderWidth="3px" borderRadius="lg" m = {5} borderColor = {radio === choice ? "blue.600" : "default"}>
+											<Button h = {70} isFullWidth justifyContent="flex-start" variant = "ghost" onClick = {() => radioSelect(choice)}>
+												<Box>
+													<Radio value = {choice} onChange = {() => select(choice)}>{choice}</Radio>
+												</Box>
+											</Button>
+										</Box>
+									</div>
+								))}
 						</div>
-					))}
-				</div>}
+					</RadioGroup>}
+
+				{meta.type === "free" &&
+					<div className = "flex px-10 pt-5">
+						<FormControl>
+							<Input onChange = {updateFreeText} value = {freeText}></Input>
+						</FormControl>
+					</div>}
+				
 
 				<div className = "text-center mt-5 mb-10">
 					<Button onClick={submit} colorScheme="teal">Submit</Button>

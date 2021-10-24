@@ -8,17 +8,22 @@ import {
   FormLabel,
   Input,
   FormHelperText,
+	Slider, 
+	SliderThumb,
+	SliderFilledTrack,
+	SliderTrack
 } from "@chakra-ui/react";
 
 export default function Home() {
   const [link, setLink] = React.useState("");
+	const [qrSize, setQrSize] = React.useState(150);
 
   const handleLink = (event) => {
     setLink(event.target.value);
   }
 
   return (
-    <Flex>
+    <div className = "flex">
       <Box minW="lg" w="50%" m = {10}>
         <FormControl id="link">
           <FormLabel>Link</FormLabel>
@@ -26,9 +31,17 @@ export default function Home() {
           <FormHelperText>We won&apos;t store it anywhere</FormHelperText>
         </FormControl>
       </Box>
-      <Box m="10">
-        <QRCode value={link} />
+      <Box className = "align-center m-10">
+				<QRCode value={link} size = {qrSize} /><br />
+				<Slider aria-label="slider-ex-1" defaultValue={150} min={100} max={300} onChange={(val) => setQrSize(val)}>
+					<SliderTrack>
+						<SliderFilledTrack />
+					</SliderTrack>
+					<SliderThumb />
+				</Slider><br />
+
+				<p>{link}</p>
       </Box>
-    </Flex>
+    </div>
   );
 }
