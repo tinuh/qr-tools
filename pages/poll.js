@@ -21,7 +21,7 @@ export default function Survey() {
   const [published, setPub] = React.useState(false);
   const [choices, setChoices] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
-  const [responses, setResponses] = React.useState({});
+  const [resData, setResData] = React.useState({});
   const [metaData, setMetaData] = React.useState({});
 
   const { register, handleSubmit, watch, formState: { errors }} = useForm();
@@ -30,6 +30,16 @@ export default function Survey() {
   const onSubmit = (data) => {
     data.choices = choices;
     setMetaData(data);
+
+    let temp = {};
+    choices.map((choice) => {
+      temp[choice] = 0;
+    });
+    console.log(temp)
+    setResData({...temp});
+
+    console.log(resData);
+
     publish(data);
   }
 
@@ -62,15 +72,26 @@ export default function Survey() {
 
       conn.on("data", (data) => {
         console.log("Received", data);
+        onData(data);
       });
 
     });
   };
 
+  const onData = (data) => {
+    if (data.type === "multiple" || data.type === "single") {
+      console.log(resData);
+      Object.keys(data.data).map(function(key, index) {
+        if (data.data[key]){
+          setResData({...resData, [key]: resData[key] + 1})
+        }
+      });
+    }
+  }
+
   const addChoice = () => {
     let temp = [...choices, ''];
     setChoices(temp);
-    console.log(choices);
   }
 
   const deleteChoice = (key) => {
@@ -107,11 +128,9 @@ export default function Survey() {
 
             <div className="flex mt-5">
                 <div className="pr-3 flex-auto">
-                  <Select
-                    {...register("type")} 
-                  >
-                    <option value="multiple" default>Multiple Choice</option>
+                  <Select {...register("type")} defaultValue="multiple">
                     <option value="single">Single Choice</option>
+                    <option value="multiple">Multiple Choice</option>
                     <option value="free">Free Response</option>
                   </Select>
                 </div>
@@ -145,6 +164,7 @@ export default function Survey() {
         {(published && !loading) &&
           <div>
             <Heading size="lg" align="center">{metaData.question}</Heading>
+            {JSON.stringify(resData)}
           </div>}
       </Box>
       <Box m="10">

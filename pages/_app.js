@@ -1,7 +1,7 @@
 import 'tailwindcss/tailwind.css'
 import "../styles/globals.css";
 import Head from "next/head";
-import { ChakraProvider, Flex, Box } from "@chakra-ui/react";
+import { ChakraProvider } from "@chakra-ui/react";
 import theme from "../styles/theme";
 import Footer from "../components/footer";
 import SideBar from "../components/sidebar";
@@ -32,11 +32,9 @@ function MyApp({ Component, pageProps }) {
           </div>
         </div>
 
-        {(router.pathname === "/poll" || router.pathname === "/forms" || router.pathname === "/links") &&
-          <div className="fixed bottom-0 min-w-full">
-            <Footer />
-          </div>
-        }
+        <div className="fixed bottom-0 min-w-full">
+          <Footer />
+        </div>
       </ChakraProvider>
     </>
   );

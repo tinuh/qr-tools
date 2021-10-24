@@ -36,9 +36,11 @@ export default function Survey() {
 				// Receive the survey info
 				conn.on("data", (data) => {
 					setMeta(data);
+					let temp = {};
 					data.choices.map((choice) => {
-						setChosen({...chosen, [choice]: false})
+						temp[choice] = false;
 					});
+					setChosen(temp);
 					setLoading(false);
 				});
 
@@ -46,13 +48,14 @@ export default function Survey() {
 		}
 	}, [peerImp, id])
 
-	const select = (choice) => {
-		
-		console.log(choice);
+	const select = (choice, val) => {
+		let temp = {...chosen};
+		temp[choice] = val;
+		setChosen(temp);
 	}
 
 	const submit = () => {
-		conn.send("Submit");
+		conn.send({type: meta.type, data: chosen});
 	}
 
 	return (
@@ -67,22 +70,24 @@ export default function Survey() {
 
 				<Heading size="lg" align="center">{meta.question}</Heading>
 
-				<div className="flex">
+				{meta.type === "multiple" && 
+				<div className="flex flex-wrap">
 					{meta.choices.map((choice, key) => (
-						<div key={key}>
-							<Box borderWidth="3px" borderRadius="lg" m = {5}>
-								<Button h = "70" variant = "ghost">
-									<Box p={5}>
-										<Checkbox onChange = {() => select(choice)}>{choice}</Checkbox>
+						<div key={key} className = "flex-1">
+							<Box borderWidth="3px" borderRadius="lg" m = {5} borderColor = {chosen[choice] ? "blue.600" : "default"}>
+								<Button h = {70} isFullWidth justifyContent="flex-start" variant = "ghost" onClick = {() => select(choice, !chosen[choice])}>
+									<Box>
+										<Checkbox onChange = {() => select(choice, chosen[choice])} isChecked = {chosen[choice]}>{choice}</Checkbox>
 									</Box>
 								</Button>
 							</Box>
-							<br />
 						</div>
 					))}
-				</div>
+				</div>}
 
-				<Button onClick={submit} colorScheme="teal">Submit</Button>
+				<div className = "text-center mt-5 mb-10">
+					<Button onClick={submit} colorScheme="teal">Submit</Button>
+				</div>
 			</div>)
 	)
 }
