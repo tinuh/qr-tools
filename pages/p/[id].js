@@ -64,10 +64,7 @@ export default function Survey() {
 				<Heading size="lg" align="center">Loading...</Heading>
 			</div>) :
 
-			(<div>
-				{id}
-
-
+			(<div className = "pt-5">
 				<Heading size="lg" align="center">{meta.question}</Heading>
 
 				{meta.type === "multiple" && 
