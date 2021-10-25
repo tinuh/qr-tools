@@ -69,8 +69,8 @@ export default function Form() {
 
 					<div className="px-10 pt-5">
 						{meta.fields.map((field, key) =>
-							<div className = "pb-5">
-								<FormControl key={key}>
+							<div className = "pb-5" key = {key}>
+								<FormControl>
 									<FormLabel>{field}</FormLabel>
 									<Input {...register(field)} placeholder={field}></Input>
 								</FormControl>

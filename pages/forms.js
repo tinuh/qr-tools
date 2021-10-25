@@ -221,8 +221,8 @@ export default function Forms() {
                 <Tbody>
                   {resData.map((res, key) => 
                     <Tr key = {key}>
-                      {metaData.fields.map((field, key) => 
-                        <Td key = {key}>{res[field]}</Td>
+                      {metaData.fields.map((field, fKey) => 
+                        <Td key = {fKey}>{res[field]}</Td>
                       )}
                     </Tr>
                   )}
