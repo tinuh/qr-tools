@@ -32,15 +32,18 @@ export default function Home() {
         </FormControl>
       </Box>
       <Box className = "align-center m-10">
-				<QRCode value={link} size = {qrSize} /><br />
-				<Slider aria-label="slider-ex-1" defaultValue={150} min={100} max={300} onChange={(val) => setQrSize(val)}>
-					<SliderTrack>
-						<SliderFilledTrack />
-					</SliderTrack>
-					<SliderThumb />
-				</Slider><br />
+				{link !== "" && 
+					<div>
+						<QRCode value={link} size = {qrSize} /><br />
+						<Slider aria-label="slider-ex-1" defaultValue={150} min={100} max={300} onChange={(val) => setQrSize(val)}>
+							<SliderTrack>
+								<SliderFilledTrack />
+							</SliderTrack>
+							<SliderThumb />
+						</Slider><br />
 
-				<p>{link}</p>
+						<p>{link}</p>
+					</div>}
       </Box>
     </div>
   );

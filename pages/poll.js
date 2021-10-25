@@ -1,7 +1,6 @@
 import React from "react";
 import { QRCode } from "react-qrcode-logo";
 import {
-  Flex,
   Box,
   FormControl,
   FormLabel,
@@ -18,7 +17,7 @@ import {
   SliderThumb
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-import { Bar, Bubble, Pie } from "react-chartjs-2";
+import { Bar, Pie } from "react-chartjs-2";
 
 export default function Survey() {
   const [link, setLink] = React.useState("");
