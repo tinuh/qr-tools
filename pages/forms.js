@@ -14,20 +14,26 @@ import {
   Slider,
   SliderFilledTrack,
   SliderTrack,
-  SliderThumb
+  SliderThumb,
+  Table,
+  Thead,
+  Tbody,
+  Tfoot,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-import { Bar, Pie } from "react-chartjs-2";
 
 export default function Forms() {
   const [link, setLink] = React.useState("");
   const [published, setPub] = React.useState(false);
   const [choices, setChoices] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
-  const [resData, setResData] = React.useState({});
+  const [resData, setResData] = React.useState([]);
   const [freeData, setFreeData] = React.useState([]);
   const [metaData, setMetaData] = React.useState({});
-  const [chartType, setChart] = React.useState('pie');
   const [qrSize, setQrSize] = React.useState(150);
 
   const {
@@ -39,17 +45,8 @@ export default function Forms() {
   const watchAll = watch();
 
   const onSubmit = (data) => {
-    data.choices = choices;
+    data.fields = [...choices];
     setMetaData(data);
-
-    let temp = {};
-    choices.map((choice) => {
-      temp[choice] = 0;
-    });
-    console.log(temp);
-    setResData({ ...temp });
-
-    console.log(resData);
 
     publish(data);
   };
@@ -88,21 +85,9 @@ export default function Forms() {
   };
 
   const onData = (data) => {
-    if (data.type === "multiple" || data.type === "single") {
-      console.log(resData);
-      Object.keys(data.data).map(function (key) {
-        if (data.data[key]) {
-          setResData((prevState) => {
-            return {...prevState, [key]: prevState[key] + 1 };
-          });
-        }
-      });
-    }
-    else if (data.type === "free"){
-      setFreeData((prevData) => {
-        return [...prevData, data.data];
-      });
-    }
+    setResData((prevState) => {
+      return [...prevState, data];
+    })
   };
 
   const addChoice = () => {
@@ -222,26 +207,28 @@ export default function Forms() {
         {published && !loading && (
           <div className = "grid justify-items-center">
             <Heading size="lg" align="center">
-              {metaData.question}
+              {metaData.name}
             </Heading>
-            {(metaData.type === "single" || metaData.type === "multiple") && 
-              <div className="mt-10 w-2/3 text-center">
-                <ButtonGroup isAttached mb={5}>
-                  <Button mr="-px" onClick = {() => setChart('pie')}>Pie</Button>
-                  <Button onClick = {() => setChart('bar')}>Bar</Button>
-                </ButtonGroup>
-                {chartType === 'pie' && <Pie data={graphData} />}
-                {chartType === 'bar' && <Bar data={graphData} />}
-              </div>}
-            {metaData.type === "free" && 
-              <div>
-                <div className = "flex flex-wrap mt-5">
-                {freeData.map((res, key) => 
-                  <Box className = "p-3 m-3 flex-auto text-center" key = {key} borderWidth = "2px" borderRadius="lg">
-                    {res}
-                  </Box>)}
-                </div>
-              </div>}
+            <Box borderWidth = "3px" borderRadius="lg" className = "mt-5 w-full">
+              <Table variant="simple">
+                <Thead>
+                  <Tr>
+                    {metaData.fields.map((field, key) => 
+                      <Th key = {key}>{field}</Th>
+                    )}
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {resData.map((res, key) => 
+                    <Tr key = {key}>
+                      {metaData.fields.map((field, key) => 
+                        <Td key = {key}>{res[field]}</Td>
+                      )}
+                    </Tr>
+                  )}
+                </Tbody>
+              </Table>
+            </Box>
           </div>
         )}
       </Box>
