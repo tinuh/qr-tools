@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import Button from '../components/button';
+import { motion } from 'framer-motion';
 
 export default function Home() {
   const [link, setLink] = React.useState("");
@@ -22,13 +23,17 @@ export default function Home() {
 
   return (
     <div>
-      <Box py={10} px={10}
-          textAlign="center"
-      >
-          <Heading as="h1" size="2xl" m={2}>QR Tools</Heading>
-          <Heading as="h2" size="lg" fontWeight="normal">
-              Realtime QR Tools with p2p connections
-          </Heading>
+      <Box py={10} px={10} textAlign="center">
+          <motion.div
+            initial={{ y: -200 }}
+            animate={{ y: 0 }}
+            transition = {{ duration: 1 }}            
+          >
+            <Heading as="h1" size="2xl" m={2}>QR Tools</Heading>
+            <Heading as="h2" size="lg" fontWeight="normal">
+                Realtime QR Tools utilizing p2p connections
+            </Heading>
+          </motion.div>
           <Link href="/poll">
               <Button
                 my = {8}
@@ -46,42 +51,36 @@ export default function Home() {
 
       <Container maxW="container.lg" p={12}>
           <SimpleGrid columns={{ base: 1, md: 2 }} spacing={12}>
-          <Box>
-              <Center>
-                <Image m={4} src='https://pollster.ink/images/create.svg' alt="create" h={48}/>
-              </Center>
-              <Heading as="h3" size="lg" my={2}>For everyone, and anyone.</Heading>
-              <Text fontSize="lg">
-                  Teachers, members of the government, and even concerned citizens can launch polls about problems they are facing to get opinions on the best method to approach the problem. Or, anyone can create polls just for fun!
-              </Text>
-          </Box>
-          <Box>
-              <Center>
-                  <Image m={4} src='https://pollster.ink/images/options.svg' alt="create" h={48}/>
-              </Center>
-              <Heading as="h3" size="lg" my={2}>Customized and relevant.</Heading>
-              <Text fontSize="lg">
-                  The community can pick and choose which polls are most important for them, this can allow the community to prioritize the most urgent polls that could potentially cause drastic reforms.
-              </Text>
-          </Box>
-          <Box>
-              <Center>
-                  <Image m={4} src='https://pollster.ink/images/map.svg' alt="create" h={48}/>
-              </Center>
-              <Heading as="h3" size="lg" my={2}>Built with community values in mind.</Heading>
-              <Text fontSize="lg">
-              Easily find polls near you, with an interactive map. You can answer polls related to problems that are arising in your community that can help better the environment, aid in the growth of local startups, allow you to share your ideas with your local government, and so much more!
-              </Text>
-          </Box>
-          <Box>
-              <Center>
-                  <Image m={4} src='https://pollster.ink/images/pwa.svg' alt="create" h={48}/>
-              </Center>
-              <Heading as="h3" size="lg" my={2}>Use Pollster anywhere!</Heading>
-              <Text fontSize="lg">
-                  Pollster is PWA optimized, so you can download it and run it as if it were a native app!
-              </Text>
-          </Box>
+          <motion.div
+            initial={{ x: -200 }}
+            animate={{ x: 0 }}
+            transition = {{ duration: 1 }}            
+          >
+            <Box>
+                <Center>
+                  <Image m={4} src='https://pollster.ink/images/create.svg' alt="create" h={48}/>
+                </Center>
+                <Heading as="h3" size="lg" my={2}>For everyone, and anyone.</Heading>
+                <Text fontSize="lg">
+                    Teachers, presenters, and even the ordinary person can launch realtime polls & forms about whatever they want. Whether you just want to get a rooms attendance, get people's opinion, or just create polls/forms for fun, QR Tools if for you.
+                </Text>
+            </Box>
+          </motion.div>
+          <motion.div
+            initial={{ x: 200 }}
+            animate={{ x: 0 }}
+            transition = {{ duration: 1 }}            
+          >
+            <Box>
+                <Center>
+                    <Image m={4} src='https://pollster.ink/images/pwa.svg' alt="create" h={48}/>
+                </Center>
+                <Heading as="h3" size="lg" my={2}>Use QR Tools on any device!</Heading>
+                <Text fontSize="lg">
+                    QR Tools is PWA optimized, so you can use it on a regular browser or downloded as a native app on any device!
+                </Text>
+            </Box>
+          </motion.div>
           </SimpleGrid>
       </Container>
 
