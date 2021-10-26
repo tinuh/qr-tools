@@ -34,7 +34,7 @@ export default function Home() {
                 Realtime QR Tools utilizing p2p connections
             </Heading>
           </motion.div>
-          <Link href="/poll">
+          <Link href="/poll" passHref>
               <Button
                 my = {8}
                 size = "lg"
@@ -62,7 +62,7 @@ export default function Home() {
                 </Center>
                 <Heading as="h3" size="lg" my={2}>For everyone, and anyone.</Heading>
                 <Text fontSize="lg">
-                    Teachers, presenters, and even the ordinary person can launch realtime polls & forms about whatever they want. Whether you just want to get a rooms attendance, get people's opinion, or just create polls/forms for fun, QR Tools if for you.
+                    Teachers, presenters, and even the ordinary person can launch realtime polls & forms about whatever they want. Whether you just want to get a rooms attendance, get people&apos;s opinion, or just create polls/forms for fun, QR Tools if for you.
                 </Text>
             </Box>
           </motion.div>
