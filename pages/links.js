@@ -11,7 +11,8 @@ import {
 	Slider, 
 	SliderThumb,
 	SliderFilledTrack,
-	SliderTrack
+	SliderTrack,
+  Image
 } from "@chakra-ui/react";
 
 export default function Home() {
@@ -34,7 +35,7 @@ export default function Home() {
       <Box className = "align-center m-10">
 				{link !== "" && 
 					<div>
-						<QRCode value={link} size = {qrSize} /><br />
+						<QRCode value={link} size = {qrSize} logoImage = "/img/qr-tools.png"/><br />
 						<Slider aria-label="slider-ex-1" defaultValue={150} min={100} max={300} onChange={(val) => setQrSize(val)}>
 							<SliderTrack>
 								<SliderFilledTrack />

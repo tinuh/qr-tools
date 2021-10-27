@@ -1,0 +1,32 @@
+{
+    "theme_color": "#90CDF4",
+    "background_color": "#1A202C",
+    "display": "standalone",
+    "scope": "/",
+    "start_url": "/",
+    "name": "QR Tools",
+    "short_name": "QR Tools",
+    "description": "QR Tools allows teachers, presenters, and even the ordinary person to launch realtime polls & forms about whatever they want. Whether you just want to get a rooms attendance, get people's opinion, or just create polls/forms for fun, QR Tools if for you.",
+    "icons": [
+        {
+            "src": "/img/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/img/icon-256x256.png",
+            "sizes": "256x256",
+            "type": "image/png"
+        },
+        {
+            "src": "/img/icon-384x384.png",
+            "sizes": "384x384",
+            "type": "image/png"
+        },
+        {
+            "src": "/img/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

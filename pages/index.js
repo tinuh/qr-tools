@@ -27,7 +27,7 @@ export default function Home() {
           <motion.div
             initial={{ y: -200 }}
             animate={{ y: 0 }}
-            transition = {{ duration: 1 }}            
+            transition = {{ duration: 1, type: "spring", stiffness: 50 }}  
           >
             <Heading as="h1" size="2xl" m={2}>QR Tools</Heading>
             <Heading as="h2" size="lg" fontWeight="normal">
@@ -54,7 +54,7 @@ export default function Home() {
           <motion.div
             initial={{ x: -200 }}
             animate={{ x: 0 }}
-            transition = {{ duration: 1 }}            
+            transition = {{ duration: 1, type: "spring", stiffness: 50 }}            
           >
             <Box>
                 <Center>
@@ -69,7 +69,7 @@ export default function Home() {
           <motion.div
             initial={{ x: 200 }}
             animate={{ x: 0 }}
-            transition = {{ duration: 1 }}            
+            transition = {{ duration: 1, type: "spring", stiffness: 50 }}            
           >
             <Box>
                 <Center>
