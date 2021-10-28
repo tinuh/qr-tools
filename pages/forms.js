@@ -9,8 +9,6 @@ import {
   FormErrorMessage,
   Tooltip,
   Heading,
-  Select,
-  ButtonGroup,
   Slider,
   SliderFilledTrack,
   SliderTrack,
@@ -24,6 +22,7 @@ import {
   Td,
   TableCaption,
 } from "@chakra-ui/react";
+import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 
 export default function Forms() {
@@ -240,7 +239,13 @@ export default function Forms() {
         )}
         {published && !loading && (
           <Box align = "center">
-            <QRCode value={link} size = {qrSize} /><br />
+            <motion.div
+              initial={{ x: 200 }}
+              animate={{ x: 0 }}
+              transition = {{ duration: 1, type: "spring", stiffness: 50 }}
+            >
+              <QRCode value={link} size = {qrSize} /><br />
+            </motion.div>
 
             <Slider aria-label="slider-ex-1" defaultValue={150} min={100} max={300} onChange={(val) => setQrSize(val)}>
               <SliderTrack>

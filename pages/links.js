@@ -14,6 +14,7 @@ import {
 	SliderTrack,
   Image
 } from "@chakra-ui/react";
+import { motion } from "framer-motion";
 
 export default function Home() {
   const [link, setLink] = React.useState("");
@@ -35,7 +36,14 @@ export default function Home() {
       <Box className = "align-center m-10">
 				{link !== "" && 
 					<div>
-						<QRCode value={link} size = {qrSize} logoImage = "/img/qr-tools.png"/><br />
+            <motion.div
+              initial={{ x: 200 }}
+              animate={{ x: 0 }}
+              transition = {{ duration: 1, type: "spring", stiffness: 50 }}
+            >
+						  <QRCode value={link} size = {qrSize} logoImage = "/img/qr-tools.png"/>
+            </motion.div>
+            <br />
 						<Slider aria-label="slider-ex-1" defaultValue={150} min={100} max={300} onChange={(val) => setQrSize(val)}>
 							<SliderTrack>
 								<SliderFilledTrack />

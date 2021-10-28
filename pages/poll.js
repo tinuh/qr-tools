@@ -17,6 +17,7 @@ import {
   SliderThumb
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
+import { motion } from "framer-motion";
 import { Bar, Pie } from "react-chartjs-2";
 
 export default function Survey() {
@@ -53,6 +54,25 @@ export default function Survey() {
 
     publish(data);
   };
+
+  //method to save data to cloudflare KV using workers
+  const save = async(data) => {
+    await fetch("https://qr-tools-save.tinu-personal.workers.dev", {
+      method: "POST",
+      mode: "cors",
+      cache: "no-cache",
+      headers : {
+        'Content-Type': 'application/json',
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET,HEAD,POST,OPTIONS",
+        "Access-Control-Max-Age": "86400",
+      },
+      referrerPolicy: "no-referrer",
+      body: JSON.stringify(data)
+    }).then(res => {
+      console.log(res);
+    });
+  }
 
   //import peerjs
   React.useEffect(() => {
@@ -234,6 +254,9 @@ export default function Survey() {
                 </ButtonGroup>
                 {chartType === 'pie' && <Pie data={graphData} />}
                 {chartType === 'bar' && <Bar data={graphData} />}
+                <Button onClick = {() => save({...resData})} colorScheme="teal">
+                  Save Data
+                </Button>
               </div>}
             {metaData.type === "free" && 
               <div>
@@ -255,7 +278,13 @@ export default function Survey() {
         )}
         {published && !loading && (
           <Box align = "center">
-            <QRCode value={link} size = {qrSize} /><br />
+            <motion.div
+              initial={{ x: 200 }}
+              animate={{ x: 0 }}
+              transition = {{ duration: 1, type: "spring", stiffness: 50 }}
+            >
+              <QRCode value={link} size = {qrSize} /><br />
+            </motion.div>
 
             <Slider aria-label="slider-ex-1" defaultValue={150} min={100} max={300} onChange={(val) => setQrSize(val)}>
               <SliderTrack>
