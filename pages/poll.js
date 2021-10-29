@@ -14,13 +14,20 @@ import {
   Slider,
   SliderFilledTrack,
   SliderTrack,
-  SliderThumb
+  SliderThumb,
+  useToast
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { Bar, Pie } from "react-chartjs-2";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShareAlt } from '@fortawesome/free-solid-svg-icons';
+import { faDownload } from '@fortawesome/free-solid-svg-icons';
+
 
 export default function Survey() {
+  const toast = useToast();
+
   const [link, setLink] = React.useState("");
   const [published, setPub] = React.useState(false);
   const [choices, setChoices] = React.useState([]);
@@ -61,16 +68,36 @@ export default function Survey() {
       method: "POST",
       mode: "cors",
       cache: "no-cache",
-      headers : {
+      headers   : {
         'Content-Type': 'application/json',
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET,HEAD,POST,OPTIONS",
         "Access-Control-Max-Age": "86400",
       },
       referrerPolicy: "no-referrer",
-      body: JSON.stringify(data)
-    }).then(res => {
-      console.log(res);
+      body: JSON.stringify({question: metaData.question, type: metaData.type, data: data})
+    }).then(res => res.json()).then(data => {
+      console.log(data);
+      let link = `https://qr-tools-save.tinu-personal.workers.dev/${data.key}`;
+
+      try {
+        navigator.clipboard.writeText(link);
+
+        toast({
+            title: "Copied to Clipboard",
+            description: "The sharing link is copied to clipboard",
+            status: "success",
+            isClosable: true,
+        })
+      }
+      catch{
+          toast({
+              title: "Error",
+              description: "Error copying to clipboard",
+              status: "error",
+              isClosable: true,
+          })
+      }
     });
   }
 
@@ -254,9 +281,6 @@ export default function Survey() {
                 </ButtonGroup>
                 {chartType === 'pie' && <Pie data={graphData} />}
                 {chartType === 'bar' && <Bar data={graphData} />}
-                <Button onClick = {() => save({...resData})} colorScheme="teal">
-                  Save Data
-                </Button>
               </div>}
             {metaData.type === "free" && 
               <div>
@@ -294,6 +318,13 @@ export default function Survey() {
             </Slider><br />
 
             <p>{link}</p>
+
+            <Button leftIcon={<FontAwesomeIcon icon={faShareAlt}/>} onClick = {() => save({...resData})} colorScheme="teal" mt={5} mr={5}>
+              Share Results
+            </Button>
+            <Button leftIcon={<FontAwesomeIcon icon={faDownload}/>} colorScheme="teal" mt={5}>
+              Download Results
+            </Button>
           </Box>
         )}
       </Box>
