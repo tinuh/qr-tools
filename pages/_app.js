@@ -12,7 +12,7 @@ import { motion } from "framer-motion";
 function MyApp({ Component, pageProps, router }) {
   const navRoutes = [
     '/poll',
-    '/forms',
+    '/form',
     '/links'
   ]
 
@@ -30,12 +30,12 @@ function MyApp({ Component, pageProps, router }) {
       <ChakraProvider theme={theme} resetCSS>
       <Scrollbar style={{ width: "100vw", height: "100vh" }}>
           {navRoutes.includes(router.pathname) ?
-          <div className="flex flex-wrap font-sans mb-20">
-            <div className="flex-initial md:min-w-1/4 pl-10 pr-10">
-              <SideBar />
-              
-            </div>
-            <motion.div 
+            <div className="flex flex-wrap font-sans mb-20">
+              <div className="flex-initial md:min-w-1/4 pl-10 pr-10">
+                <SideBar />
+                
+              </div>
+              <motion.div 
                 key = {router.route}
                 className="flex-1"
                 initial={{ y: -200 }}

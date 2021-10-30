@@ -24,16 +24,16 @@ import {
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
+import { CSVLink } from "react-csv";
 
-export default function Forms() {
+export default function () {
   const [link, setLink] = React.useState("");
   const [published, setPub] = React.useState(false);
   const [choices, setChoices] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [resData, setResData] = React.useState([]);
-  const [freeData, setFreeData] = React.useState([]);
   const [metaData, setMetaData] = React.useState({});
-  const [qrSize, setQrSize] = React.useState(150);
+  const [qrSize, setQrSize] = React.useState(200);
 
   const {
     register,
@@ -106,25 +106,6 @@ export default function Forms() {
     setChoices(temp);
   };
 
-  const graphData = {
-    labels: Object.keys(resData),
-    datasets: [
-      {
-        label: "# of votes",
-        data: Object.values(resData),
-        borderWidth: 1,
-        backgroundColor: [
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(54, 162, 235, 0.2)",
-          "rgba(255, 206, 86, 0.2)",
-          "rgba(75, 192, 192, 0.2)",
-          "rgba(153, 102, 255, 0.2)",
-          "rgba(255, 159, 64, 0.2)",
-        ],
-      },
-    ],
-  };
-
   return (
     <div className = "flex">
       <Box minW="lg" w="50%" m={10}>
@@ -171,31 +152,38 @@ export default function Forms() {
             <br />
             {watchAll.type !== "free" &&
               choices.map((val, key) => (
-                <FormControl key={key}>
-                  <FormLabel>Field {key + 1}</FormLabel>
+                <motion.div 
+                  key = {key}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition = {{ duration: 0.4 }}
+                >
+                  <FormControl key={key}>
+                    <FormLabel>Field {key + 1}</FormLabel>
 
-                  <div className="flex">
-                    <div className="pr-3 flex-auto">
-                      <Input
-                        disabled={published}
-                        value={val}
-                        onChange={(event) => updateChoice(event, key)}
-                        placeholder={`Field ${key + 1}`}
-                      />
+                    <div className="flex">
+                      <div className="pr-3 flex-auto">
+                        <Input
+                          disabled={published}
+                          value={val}
+                          onChange={(event) => updateChoice(event, key)}
+                          placeholder={`Field ${key + 1}`}
+                        />
+                      </div>
+                      <Tooltip label="Delete Field">
+                        <Button
+                          disabled={published}
+                          onClick={() => deleteChoice(key)}
+                          colorScheme="red"
+                        >
+                          X
+                        </Button>
+                      </Tooltip>
                     </div>
-                    <Tooltip label="Delete Field">
-                      <Button
-                        disabled={published}
-                        onClick={() => deleteChoice(key)}
-                        colorScheme="red"
-                      >
-                        X
-                      </Button>
-                    </Tooltip>
-                  </div>
 
-                  <br />
-                </FormControl>
+                    <br />
+                  </FormControl>
+                </motion.div>
               ))}
 
             <Button disabled={published} type="submit" colorScheme="teal">
@@ -247,7 +235,7 @@ export default function Forms() {
               <QRCode value={link} size = {qrSize} /><br />
             </motion.div>
 
-            <Slider aria-label="slider-ex-1" defaultValue={150} min={100} max={300} onChange={(val) => setQrSize(val)}>
+            <Slider aria-label="slider-ex-1" defaultValue={qrSize} min={100} max={300} onChange={(val) => setQrSize(val)}>
               <SliderTrack>
                 <SliderFilledTrack />
               </SliderTrack>

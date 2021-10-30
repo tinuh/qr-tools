@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { QRCode } from "react-qrcode-logo";
 import {
   Box,
@@ -20,23 +20,25 @@ import {
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { Bar, Pie } from "react-chartjs-2";
+import { CSVLink } from "react-csv";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShareAlt } from '@fortawesome/free-solid-svg-icons';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { ThreeDots } from 'react-loading-icons';
 
-
-export default function Survey() {
+export default function Poll() {
   const toast = useToast();
 
-  const [link, setLink] = React.useState("");
-  const [published, setPub] = React.useState(false);
-  const [choices, setChoices] = React.useState([]);
-  const [loading, setLoading] = React.useState(true);
-  const [resData, setResData] = React.useState({});
-  const [freeData, setFreeData] = React.useState([]);
-  const [metaData, setMetaData] = React.useState({});
-  const [chartType, setChart] = React.useState('pie');
-  const [qrSize, setQrSize] = React.useState(150);
+  const [link, setLink] = useState("");
+  const [published, setPub] = useState(false);
+  const [choices, setChoices] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [resData, setResData] = useState({});
+  const [freeData, setFreeData] = useState([]);
+  const [metaData, setMetaData] = useState({});
+  const [chartType, setChart] = useState('pie');
+  const [qrSize, setQrSize] = useState(200);
+  const [sharing, setSharing] = useState(false);
 
   const {
     register,
@@ -64,6 +66,7 @@ export default function Survey() {
 
   //method to save data to cloudflare KV using workers
   const save = async(data) => {
+    setSharing(true);
     await fetch("https://qr-tools-save.tinu-personal.workers.dev", {
       method: "POST",
       mode: "cors",
@@ -75,10 +78,10 @@ export default function Survey() {
         "Access-Control-Max-Age": "86400",
       },
       referrerPolicy: "no-referrer",
-      body: JSON.stringify({question: metaData.question, type: metaData.type, data: data})
+      body: JSON.stringify({question: metaData.question, type: metaData.type, data: metaData.type === "free" ? freeData : data})
     }).then(res => res.json()).then(data => {
       console.log(data);
-      let link = `https://qr-tools-save.tinu-personal.workers.dev/${data.key}`;
+      let link = `${process.env.NEXT_PUBLIC_URI}/p/v/${data.key}`;
 
       try {
         navigator.clipboard.writeText(link);
@@ -89,6 +92,7 @@ export default function Survey() {
             status: "success",
             isClosable: true,
         })
+        setSharing(false);
       }
       catch{
           toast({
@@ -188,6 +192,17 @@ export default function Survey() {
     ],
   };
 
+  const csvData = metaData.type === "free" ?
+  [
+
+  ] :
+  [
+    [metaData.question],
+    [],
+    [...choices],
+    choices.map((choice) => resData[choice])
+  ]
+
   return (
     <div className = "flex">
       <Box minW="lg" w="50%" m={10}>
@@ -236,31 +251,37 @@ export default function Survey() {
             <br />
             {watchAll.type !== "free" &&
               choices.map((val, key) => (
-                <FormControl key={key}>
-                  <FormLabel>Choice {key + 1}</FormLabel>
-
-                  <div className="flex">
-                    <div className="pr-3 flex-auto">
-                      <Input
-                        disabled={published}
-                        value={val}
-                        onChange={(event) => updateChoice(event, key)}
-                        placeholder={`Choice ${key + 1}`}
-                      />
+                <motion.div 
+                  key = {key}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition = {{ duration: 0.4 }}
+                >
+                  <FormControl>
+                    <FormLabel>Choice {key + 1}</FormLabel>
+                    <div className="flex">
+                      <div className="pr-3 flex-auto">
+                        <Input
+                          disabled={published}
+                          value={val}
+                          onChange={(event) => updateChoice(event, key)}
+                          placeholder={`Choice ${key + 1}`}
+                        />
+                      </div>
+                      <Tooltip label="Delete Answer Choice">
+                        <Button
+                          disabled={published}
+                          onClick={() => deleteChoice(key)}
+                          colorScheme="red"
+                        >
+                          X
+                        </Button>
+                      </Tooltip>
                     </div>
-                    <Tooltip label="Delete Answer Choice">
-                      <Button
-                        disabled={published}
-                        onClick={() => deleteChoice(key)}
-                        colorScheme="red"
-                      >
-                        X
-                      </Button>
-                    </Tooltip>
-                  </div>
 
-                  <br />
-                </FormControl>
+                    <br />
+                  </FormControl>
+                </motion.div>
               ))}
 
             <Button disabled={published} type="submit" colorScheme="teal">
@@ -286,9 +307,17 @@ export default function Survey() {
               <div>
                 <div className = "flex flex-wrap mt-5">
                 {freeData.map((res, key) => 
-                  <Box className = "p-3 m-3 flex-auto text-center" key = {key} borderWidth = "2px" borderRadius="lg">
+                <motion.div 
+                  className = "m-3 flex-auto text-center" 
+                  key = {key}
+                  initial={{ y: 200 }}
+                  animate={{ y: 0 }}
+                  transition = {{ duration: 1, type: "spring", stiffness: 50 }}
+                >
+                  <Box p = {3} borderWidth = "2px" borderRadius="lg">
                     {res}
-                  </Box>)}
+                  </Box>
+                </motion.div>)}
                 </div>
               </div>}
           </div>
@@ -310,7 +339,7 @@ export default function Survey() {
               <QRCode value={link} size = {qrSize} /><br />
             </motion.div>
 
-            <Slider aria-label="slider-ex-1" defaultValue={150} min={100} max={300} onChange={(val) => setQrSize(val)}>
+            <Slider aria-label="slider-ex-1" defaultValue={qrSize} min={100} max={300} onChange={(val) => setQrSize(val)}>
               <SliderTrack>
                 <SliderFilledTrack />
               </SliderTrack>
@@ -319,12 +348,18 @@ export default function Survey() {
 
             <p>{link}</p>
 
-            <Button leftIcon={<FontAwesomeIcon icon={faShareAlt}/>} onClick = {() => save({...resData})} colorScheme="teal" mt={5} mr={5}>
-              Share Results
+            <Button leftIcon={sharing ? <></> :<FontAwesomeIcon icon={faShareAlt}/>} onClick = {() => save({...resData})} colorScheme="teal" mt={5} mr={5}>
+              {sharing ? <ThreeDots width = {50} /> : <>Share Results</>}
             </Button>
-            <Button leftIcon={<FontAwesomeIcon icon={faDownload}/>} colorScheme="teal" mt={5}>
-              Download Results
-            </Button>
+
+            <CSVLink 
+              data = {csvData}
+              filename = {`QR Tools - ${metaData.question}.csv`}
+            >
+              <Button leftIcon={<FontAwesomeIcon icon={faDownload}/>} colorScheme="teal" mt={5}>
+                Download Results
+              </Button>
+            </CSVLink>
           </Box>
         )}
       </Box>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { 
 	Button, 
@@ -14,13 +14,13 @@ import {
 export default function Survey() {
 	const router = useRouter();
 	const { id } = router.query;
-	const [peerImp, setPeerImp] = React.useState(true);
-	const [loading, setLoading] = React.useState(true);
-	const [meta, setMeta] = React.useState({});
-	const [conn, setConn] = React.useState();
-	const [chosen, setChosen] = React.useState({});
-	const [radio, setRadio] = React.useState("");
-	const [freeText, setFreeText] = React.useState("");
+	const [peerImp, setPeerImp] = useState(true);
+	const [loading, setLoading] = useState(true);
+	const [meta, setMeta] = useState({});
+	const [conn, setConn] = useState();
+	const [chosen, setChosen] = useState({});
+	const [radio, setRadio] = useState("");
+	const [freeText, setFreeText] = useState("");
 
 	React.useEffect(() => {
 		const fn = async () => {
@@ -32,7 +32,7 @@ export default function Survey() {
 	}, []);
 
 	React.useEffect(() => {
-		if (!peerImp) {
+		if (!peerImp && id !== undefined) {
 			const peer = new Peer();
 
 			peer.on('open', (pid) => {

@@ -26,8 +26,8 @@ export default function Sidebar() {
         <NextLink href = "/poll" passHref>
           <Button variant = {router.pathname === "/poll" ? "solid" : "outline"} colorScheme= "blue">Realtime Polls</Button>
         </NextLink>
-        <NextLink href = "/forms" passHref>
-          <Button variant = {router.pathname === "/forms" ? "solid" : "outline"} colorScheme= "blue">Form/Attendance</Button>
+        <NextLink href = "/form" passHref>
+          <Button variant = {router.pathname === "/form" ? "solid" : "outline"} colorScheme= "blue">Form/Attendance</Button>
         </NextLink>
       </Stack>
     </Box>
