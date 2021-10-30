@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { Heading, ButtonGroup, Button } from "@chakra-ui/react";
+import { Heading, ButtonGroup, Button, Box } from "@chakra-ui/react";
 import { Bar, Pie } from "react-chartjs-2";
 
 export default function Share() {
@@ -11,8 +11,8 @@ export default function Share() {
 	const [data, setData] = useState({});
 	const [chartType, setChart] = useState('pie');
 
-  React.useEffect(async () => {
-		if (id !== undefined){
+  React.useEffect(() => {
+		const getData = async() => {
 			await fetch(`https://qr-tools-save.tinu-personal.workers.dev/${id}`).then(
 				(res) => res.json()
 			).then((data) => {
@@ -20,6 +20,10 @@ export default function Share() {
 				setData(JSON.parse(data.data));
 				setLoading(false);
 			})
+		}
+
+		if (id !== undefined){
+			getData();
 		}
   }, [id]);
 
@@ -67,7 +71,7 @@ export default function Share() {
 					<div>
 						<div className = "flex flex-wrap mt-5">
 						{data.data.map((res, key) => 
-							<Box p = {3} borderWidth = "2px" borderRadius="lg">
+							<Box key = {key} p = {3} borderWidth = "2px" borderRadius="lg">
 								{res}
 							</Box>)}
 						</div>

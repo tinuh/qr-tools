@@ -26,7 +26,7 @@ import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { CSVLink } from "react-csv";
 
-export default function () {
+export default function Form() {
   const [link, setLink] = React.useState("");
   const [published, setPub] = React.useState(false);
   const [choices, setChoices] = React.useState([]);

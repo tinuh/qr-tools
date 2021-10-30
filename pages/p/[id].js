@@ -11,7 +11,7 @@ import {
 	Input 
 } from '@chakra-ui/react';
 
-export default function Survey() {
+export default function Answer() {
 	const router = useRouter();
 	const { id } = router.query;
 	const [peerImp, setPeerImp] = useState(true);
