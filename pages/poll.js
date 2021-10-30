@@ -81,7 +81,7 @@ export default function Poll() {
       body: JSON.stringify({question: metaData.question, type: metaData.type, data: metaData.type === "free" ? freeData : data})
     }).then(res => res.json()).then(data => {
       console.log(data);
-      let link = `${process.env.NEXT_PUBLIC_URI}/p/v/${data.key}`;
+      let link = `${process.env.NEXT_PUBLIC_URI}/poll/v/${data.key}`;
 
       try {
         navigator.clipboard.writeText(link);
