@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { QRCode } from "react-qrcode-logo";
 import {
   Box,
@@ -16,24 +16,29 @@ import {
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Td,
-  TableCaption,
+  useToast
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { CSVLink } from "react-csv";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShareAlt } from '@fortawesome/free-solid-svg-icons';
+import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { ThreeDots } from 'react-loading-icons';
 
 export default function Form() {
-  const [link, setLink] = React.useState("");
-  const [published, setPub] = React.useState(false);
-  const [choices, setChoices] = React.useState([]);
-  const [loading, setLoading] = React.useState(true);
-  const [resData, setResData] = React.useState([]);
-  const [metaData, setMetaData] = React.useState({});
-  const [qrSize, setQrSize] = React.useState(200);
+  const toast = useToast();
+  const [link, setLink] = useState("");
+  const [published, setPub] = useState(false);
+  const [choices, setChoices] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [resData, setResData] = useState([]);
+  const [metaData, setMetaData] = useState({});
+  const [qrSize, setQrSize] = useState(200);
+  const [sharing, setSharing] = useState(false);
 
   const {
     register,
@@ -106,6 +111,52 @@ export default function Form() {
     setChoices(temp);
   };
 
+  const share = async(data) => {
+    setSharing(true);
+    await fetch("https://qr-tools-save.tinu-personal.workers.dev", {
+      method: "POST",
+      mode: "cors",
+      cache: "no-cache",
+      headers   : {
+        'Content-Type': 'application/json',
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET,HEAD,POST,OPTIONS",
+        "Access-Control-Max-Age": "86400",
+      },
+      referrerPolicy: "no-referrer",
+      body: JSON.stringify({name: metaData.name, data: data})
+    }).then(res => res.json()).then(data => {
+      console.log(data);
+      let link = `${process.env.NEXT_PUBLIC_URI}/f/v/${data.key}`;
+
+      try {
+        navigator.clipboard.writeText(link);
+
+        toast({
+            title: "Copied to Clipboard",
+            description: "The sharing link is copied to clipboard",
+            status: "success",
+            isClosable: true,
+        })
+        setSharing(false);
+      }
+      catch{
+          toast({
+              title: "Error",
+              description: "Error copying to clipboard",
+              status: "error",
+              isClosable: true,
+          })
+
+          alert(`Your sharing link is ${link}`);
+      }
+    });
+  }
+
+  const csvHeaders = choices.map((field) => {
+    return {label: field, key: field}
+  });
+
   return (
     <div className = "flex">
       <Box minW="lg" w="50%" m={10}>
@@ -117,7 +168,7 @@ export default function Form() {
                   <FormLabel>Form Name</FormLabel>
 
                   <Input
-                    id="question"
+                    id="name"
                     placeholder="Name"
                     disabled={published}
                     type="link"
@@ -207,11 +258,16 @@ export default function Form() {
                 </Thead>
                 <Tbody>
                   {resData.map((res, key) => 
-                    <Tr key = {key}>
+                    <motion.tr 
+                      key = {key}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition = {{ duration: 0.4 }}
+                    >
                       {metaData.fields.map((field, fKey) => 
                         <Td key = {fKey}>{res[field]}</Td>
                       )}
-                    </Tr>
+                    </motion.tr>
                   )}
                 </Tbody>
               </Table>
@@ -243,6 +299,20 @@ export default function Form() {
             </Slider><br />
 
             <p>{link}</p>
+
+            <Button leftIcon={sharing ? <></> :<FontAwesomeIcon icon={faShareAlt}/>} onClick = {() => share({...resData})} colorScheme="teal" mt={5} mr={5}>
+              {sharing ? <ThreeDots width = {50} /> : <>Share Data</>}
+            </Button>
+
+            <CSVLink 
+              data = {resData}
+              headers = {csvHeaders}
+              filename = {`QR Tools - ${metaData.name}.csv`}
+            >
+              <Button leftIcon={<FontAwesomeIcon icon={faDownload}/>} colorScheme="teal" mt={5}>
+                Download Data
+              </Button>
+            </CSVLink>
           </Box>
         )}
       </Box>

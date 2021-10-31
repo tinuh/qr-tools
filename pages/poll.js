@@ -65,7 +65,7 @@ export default function Poll() {
   };
 
   //method to save data to cloudflare KV using workers
-  const save = async(data) => {
+  const share = async(data) => {
     setSharing(true);
     await fetch("https://qr-tools-save.tinu-personal.workers.dev", {
       method: "POST",
@@ -81,7 +81,7 @@ export default function Poll() {
       body: JSON.stringify({question: metaData.question, type: metaData.type, data: metaData.type === "free" ? freeData : data})
     }).then(res => res.json()).then(data => {
       console.log(data);
-      let link = `${process.env.NEXT_PUBLIC_URI}/poll/v/${data.key}`;
+      let link = `${process.env.NEXT_PUBLIC_URI}/p/v/${data.key}`;
 
       try {
         navigator.clipboard.writeText(link);
@@ -348,7 +348,7 @@ export default function Poll() {
 
             <p>{link}</p>
 
-            <Button leftIcon={sharing ? <></> :<FontAwesomeIcon icon={faShareAlt}/>} onClick = {() => save({...resData})} colorScheme="teal" mt={5} mr={5}>
+            <Button leftIcon={sharing ? <></> :<FontAwesomeIcon icon={faShareAlt}/>} onClick = {() => share({...resData})} colorScheme="teal" mt={5} mr={5}>
               {sharing ? <ThreeDots width = {50} /> : <>Share Results</>}
             </Button>
 

@@ -7,11 +7,11 @@ export default function Share() {
   const router = useRouter();
   const { id } = router.query;
 
-  const [loading, setLoading] = useState(true);
+ 	const [loading, setLoading] = useState(true);
 	const [data, setData] = useState({});
 	const [chartType, setChart] = useState('pie');
 
-  React.useEffect(() => {
+  useEffect(() => {
 		const getData = async() => {
 			await fetch(`https://qr-tools-save.tinu-personal.workers.dev/${id}`).then(
 				(res) => res.json()
