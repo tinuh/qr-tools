@@ -87,20 +87,20 @@ export default function Poll() {
         navigator.clipboard.writeText(link);
 
         toast({
-            title: "Copied to Clipboard",
-            description: "The sharing link is copied to clipboard",
-            status: "success",
-            isClosable: true,
+          title: "Copied to Clipboard",
+          description: "The sharing link is copied to clipboard",
+          status: "success",
+          isClosable: true,
         })
         setSharing(false);
       }
       catch{
-          toast({
-              title: "Error",
-              description: "Error copying to clipboard",
-              status: "error",
-              isClosable: true,
-          })
+        toast({
+            title: "Error",
+            description: "Error copying to clipboard",
+            status: "error",
+            isClosable: true,
+        })
       }
     });
   }
@@ -121,6 +121,12 @@ export default function Poll() {
       setLink(process.env.NEXT_PUBLIC_URI + "/p/" + id);
       console.log("My peer ID is: " + id);
       setLoading(false);
+      toast({
+        title: "Poll Created",
+        description: "Poll was successfully created",
+        status: "success",
+        isClosable: true,
+      });
     });
 
     peer.on("connection", async (conn) => {
@@ -172,6 +178,12 @@ export default function Poll() {
     temp[key] = event.target.value;
     setChoices(temp);
   };
+
+  const deletefree = (key) => {
+    let temp = [...freeData];
+    temp.splice(key, 1)
+    setFreeData(temp);
+  }
 
   const graphData = {
     labels: Object.keys(resData),
@@ -314,7 +326,7 @@ export default function Poll() {
                   animate={{ y: 0 }}
                   transition = {{ duration: 1, type: "spring", stiffness: 50 }}
                 >
-                  <Box p = {3} borderWidth = "2px" borderRadius="lg">
+                  <Box p = {3} borderWidth = "2px" borderRadius="lg" className = "hover:line-through cursor-pointer" onClick = {() => deletefree(key)}>
                     {res}
                   </Box>
                 </motion.div>)}
@@ -348,7 +360,7 @@ export default function Poll() {
 
             <p>{link}</p>
 
-            <Button leftIcon={sharing ? <></> :<FontAwesomeIcon icon={faShareAlt}/>} onClick = {() => share({...resData})} colorScheme="teal" mt={5} mr={5}>
+            <Button disabled = {sharing} leftIcon={sharing ? <></> :<FontAwesomeIcon icon={faShareAlt}/>} onClick = {() => share({...resData})} colorScheme="teal" mt={5} mr={5}>
               {sharing ? <ThreeDots width = {50} /> : <>Share Results</>}
             </Button>
 

@@ -31,6 +31,7 @@ import { ThreeDots } from 'react-loading-icons';
 
 export default function Form() {
   const toast = useToast();
+
   const [link, setLink] = useState("");
   const [published, setPub] = useState(false);
   const [choices, setChoices] = useState([]);
@@ -300,7 +301,7 @@ export default function Form() {
 
             <p>{link}</p>
 
-            <Button leftIcon={sharing ? <></> :<FontAwesomeIcon icon={faShareAlt}/>} onClick = {() => share({...resData})} colorScheme="teal" mt={5} mr={5}>
+            <Button disabled = {sharing} leftIcon={sharing ? <></> :<FontAwesomeIcon icon={faShareAlt}/>} onClick = {() => share({...resData})} colorScheme="teal" mt={5} mr={5}>
               {sharing ? <ThreeDots width = {50} /> : <>Share Data</>}
             </Button>
 

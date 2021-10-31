@@ -10,6 +10,7 @@ import {
 	Td,
 	Tbody
 } from '@chakra-ui/react';
+import { Puff } from 'react-loading-icons';
 
 export default function Share() {
 	const router = useRouter();
@@ -36,9 +37,11 @@ export default function Share() {
 
 	return (
 		loading ? 
-		<div>
-			Loading...
-		</div> :
+		(<div className = "grid justify-center items-center w-screen" style = {{height: "70vh"}}>
+			<div>
+				<Puff width = {200} />
+			</div>
+		</div>) :
 
 		<div>
 			<div className = "grid justify-items-center">

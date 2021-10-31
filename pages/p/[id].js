@@ -8,12 +8,20 @@ import {
 	RadioGroup, 
 	Radio, 
 	FormControl,
-	Input 
+	Input,
+	Text, 
+	FormHelperText,
+	Image,
+	useToast
 } from '@chakra-ui/react';
+import { Puff } from 'react-loading-icons';
+import { motion } from 'framer-motion';
 
 export default function Answer() {
 	const router = useRouter();
 	const { id } = router.query;
+	const toast = useToast();
+
 	const [peerImp, setPeerImp] = useState(true);
 	const [loading, setLoading] = useState(true);
 	const [meta, setMeta] = useState({});
@@ -21,6 +29,7 @@ export default function Answer() {
 	const [chosen, setChosen] = useState({});
 	const [radio, setRadio] = useState("");
 	const [freeText, setFreeText] = useState("");
+	const [submitted, setSubmitted] = useState(false);
 
 	React.useEffect(() => {
 		const fn = async () => {
@@ -86,15 +95,26 @@ export default function Answer() {
 			}
 		}
 		conn.send({type: meta.type, data: temp});
+		setSubmitted(true);
+		toast({
+			title: "Response Submitted",
+			description: "Respnse was successfully submitted",
+			status: "success",
+			isClosable: true,
+		});
 	}
 
 	return (
-		loading ?
-			(<div>
-				<Heading size="lg" align="center">Loading...</Heading>
-			</div>) :
+		<div>
+		{(loading && !submitted) &&
+			(<div className = "grid justify-center items-center w-screen" style = {{height: "70vh"}}>
+				<div>
+					<Puff width = {200} />
+				</div>
+			</div>)
+		}
 
-			(<div className = "pt-5">
+		{(!loading && !submitted) &&	(<div className = "pt-5">
 				<Heading size="lg" align="center">{meta.question}</Heading>
 
 				{meta.type === "multiple" && 
@@ -129,17 +149,34 @@ export default function Answer() {
 						</div>
 					</RadioGroup>}
 
-				{meta.type === "free" &&
-					<div className = "flex px-10 pt-5">
-						<FormControl>
-							<Input onChange = {updateFreeText} value = {freeText}></Input>
-						</FormControl>
-					</div>}
-				
+					{meta.type === "free" &&
+						<div className = "flex px-10 pt-5">
+							<FormControl>
+								<Input onChange = {updateFreeText} value = {freeText}></Input>
+							</FormControl>
+						</div>
+					}
+					
 
-				<div className = "text-center mt-5 mb-10">
-					<Button onClick={submit} colorScheme="teal">Submit</Button>
-				</div>
-			</div>)
+					<div className = "text-center mt-5 mb-10">
+						<Button onClick={submit} colorScheme="teal">Submit</Button>
+					</div>
+				</div>)}
+
+			{submitted && (
+				<motion.div 
+					className = "grid text-center"
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					transition = {{ duration: 0.4 }}
+				>
+					<div className = "grid justify-center">
+						<Image src = "/img/check.png" className = "w-24"/>
+					</div>
+					
+					<Text>Your Response has been recorded!</Text>
+				</motion.div>
+			)}
+		</div>
 	)
 }

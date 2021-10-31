@@ -1,21 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import {
 	Button,
 	Heading,
 	FormControl,
 	FormLabel,
-	Input
+	Input,
+	useToast,
+	Image,
+	Text
 } from '@chakra-ui/react';
 import { useForm } from "react-hook-form";
+import { Puff } from 'react-loading-icons';
+import { motion } from 'framer-motion';
 
 export default function Form() {
 	const router = useRouter();
 	const { id } = router.query;
-	const [peerImp, setPeerImp] = React.useState(true);
-	const [loading, setLoading] = React.useState(true);
-	const [meta, setMeta] = React.useState({});
-	const [conn, setConn] = React.useState();
+	const toast = useToast();
+
+	const [peerImp, setPeerImp] = useState(true);
+	const [loading, setLoading] = useState(true);
+	const [meta, setMeta] = useState({});
+	const [conn, setConn] = useState();
+	const [submitted, setSubmitted] = useState(false);
 
 	const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
@@ -54,15 +62,24 @@ export default function Form() {
 	const submit = (data) => {
 		console.log(data);
 		conn.send(data);
+		setSubmitted(true);
+		toast({
+			title: "Response Submitted",
+			description: "Respnse was successfully submitted",
+			status: "success",
+			isClosable: true,
+		});
 	}
 
 	return (
-		loading ?
-			(<div>
-				<Heading size="lg" align="center">Loading...</Heading>
-			</div>) :
+		<div>
+			{(loading && !submitted) && (<div className = "grid justify-center items-center w-screen" style = {{height: "70vh"}}>
+				<div>
+					<Puff width = {200} />
+				</div>
+			</div>)}
 
-			(<div className="pt-5">
+			{(!loading && !submitted) && (<div className="pt-5">
 				<Heading size="lg" align="center">{meta.name}</Heading>
 
 				<form onSubmit={handleSubmit(submit)}>
@@ -83,6 +100,22 @@ export default function Form() {
 				</div>
 
 				</form>
-			</div>)
+			</div>)}
+
+			{submitted && (
+				<motion.div 
+					className = "grid text-center"
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					transition = {{ duration: 0.4 }}
+				>
+					<div className = "grid justify-center">
+						<Image src = "/img/check.png" className = "w-24"/>
+					</div>
+					
+					<Text>Your Response has been recorded!</Text>
+				</motion.div>
+			)}
+		</div>
 	)
 }

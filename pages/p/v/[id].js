@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { Heading, ButtonGroup, Button, Box } from "@chakra-ui/react";
 import { Bar, Pie } from "react-chartjs-2";
+import { Puff } from "react-loading-icons";
 
 export default function Share() {
   const router = useRouter();
@@ -27,7 +28,6 @@ export default function Share() {
 		}
   }, [id]);
 
-
 	const graphData = loading ? [] : {
 		labels: Object.keys(data.data),
 		datasets: [
@@ -47,11 +47,12 @@ export default function Share() {
 		],
 	};
 
-
   return loading ? 
-		<div>
-			Loading...
-		</div> : 
+		(<div className = "grid justify-center items-center w-screen" style = {{height: "70vh"}}>
+			<div>
+				<Puff width = {200} />
+			</div>
+		</div>) :
 		<div>
 			<div className = "grid justify-items-center">
 				<Heading size="lg" align="center" m = {5}>
@@ -69,9 +70,9 @@ export default function Share() {
 					</div>}
 				{data.type === "free" && 
 					<div>
-						<div className = "flex flex-wrap mt-5">
+						<div className = "flex flex-wrap">
 						{data.data.map((res, key) => 
-							<Box key = {key} p = {3} borderWidth = "2px" borderRadius="lg">
+							<Box key = {key} p = {3} m= {3} borderWidth = "2px" borderRadius="lg">
 								{res}
 							</Box>)}
 						</div>
