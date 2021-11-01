@@ -206,7 +206,9 @@ export default function Poll() {
 
   const csvData = metaData.type === "free" ?
   [
-
+    [metaData.question],
+    [],
+    freeData.map((res) => res)
   ] :
   [
     [metaData.question],
