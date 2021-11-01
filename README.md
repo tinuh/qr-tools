@@ -16,4 +16,4 @@ QR Tools is a platform that allows you to create, share, and collect data throug
 #### - peerjs (webRTC)
 #### - Hosted on Vercel (Initially Cloudflare pages which lacked support for dynamic routes)
 
-<img src="https://qr.tinu.tech/diagram.png">
+<img src="https://qr.tinu.tech/img/diagram.png">
