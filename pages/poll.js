@@ -22,12 +22,14 @@ import { motion } from "framer-motion";
 import { Bar, Pie } from "react-chartjs-2";
 import { CSVLink } from "react-csv";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShareAlt } from '@fortawesome/free-solid-svg-icons';
+import { faSave, faShareAlt } from '@fortawesome/free-solid-svg-icons';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { ThreeDots } from 'react-loading-icons';
+import { useRouter } from "next/router";
 
 export default function Poll() {
   const toast = useToast();
+  const router = useRouter();
 
   const [link, setLink] = useState("");
   const [published, setPub] = useState(false);
@@ -217,6 +219,35 @@ export default function Poll() {
     choices.map((choice) => resData[choice])
   ]
 
+  const exit = () => {
+    let today = new Date();
+    let dd = String(today.getDate()).padStart(2, '0');
+    let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    let yyyy = today.getFullYear();
+    today = mm + '/' + dd + '/' + yyyy;
+
+    let raw = {question: metaData.question, type: metaData.type, date: today,data: metaData.type === "free" ? freeData : resData};
+    let curr = localStorage.getItem('history');
+
+    if (curr !== null){
+      let arr = JSON.parse(curr);
+      arr.push(raw);
+      localStorage.setItem('history', JSON.stringify(arr));
+    }
+    else {
+      localStorage.setItem('history', JSON.stringify([raw]));
+    }
+
+    toast({
+      title: "Poll Saved",
+      description: "Your poll was succesfully saved!",
+      status: "success",
+      isClosable: true,
+    })
+
+    router.push('/history')
+  }
+
   return (
     <div className = "flex">
       <Box minW="lg" w="50%" m={10}>
@@ -363,17 +394,21 @@ export default function Poll() {
             <p>{link}</p>
 
             <Button disabled = {sharing} leftIcon={sharing ? <></> :<FontAwesomeIcon icon={faShareAlt}/>} onClick = {() => share({...resData})} colorScheme="teal" mt={5} mr={5}>
-              {sharing ? <ThreeDots width = {50} /> : <>Share Results</>}
+              {sharing ? <ThreeDots width = {50} /> : <>Share</>}
             </Button>
 
             <CSVLink 
               data = {csvData}
               filename = {`QR Tools - ${metaData.question}.csv`}
             >
-              <Button leftIcon={<FontAwesomeIcon icon={faDownload}/>} colorScheme="teal" mt={5}>
-                Download Results
+              <Button leftIcon={<FontAwesomeIcon icon={faDownload}/>} colorScheme="teal" mt={5} mr = {5}>
+                Download
               </Button>
             </CSVLink>
+
+            <Button onClick = {exit} leftIcon={<FontAwesomeIcon icon={faSave}/>} colorScheme="green" mt={5}>
+              Save & Exit
+            </Button>
           </Box>
         )}
       </Box>

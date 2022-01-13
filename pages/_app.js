@@ -13,7 +13,8 @@ function MyApp({ Component, pageProps, router }) {
   const navRoutes = [
     '/poll',
     '/form',
-    '/links'
+    '/links',
+    '/history'
   ]
 
   return (

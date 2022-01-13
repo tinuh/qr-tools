@@ -29,6 +29,9 @@ export default function Sidebar() {
         <NextLink href = "/form" passHref>
           <Button variant = {router.pathname === "/form" ? "solid" : "outline"} colorScheme= "blue">Realtime Forms</Button>
         </NextLink>
+        <NextLink href = "/history" passHref>
+          <Button variant = {router.pathname === "/history" ? "solid" : "outline"} colorScheme= "blue">History</Button>
+        </NextLink>
       </Stack>
     </Box>
   );
