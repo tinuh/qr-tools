@@ -171,7 +171,7 @@ export default function Answer() {
 					transition = {{ duration: 0.4 }}
 				>
 					<div className = "grid justify-center">
-						<Image src = "/img/check.png" className = "w-24"/>
+						<Image src = "/img/check.png" alt = "Check Mark" className = "w-24"/>
 					</div>
 					
 					<Text>Your Response has been recorded!</Text>
