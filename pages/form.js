@@ -25,12 +25,13 @@ import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { CSVLink } from "react-csv";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faShareAlt } from '@fortawesome/free-solid-svg-icons';
-import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { faShareAlt, faSave, faDownload } from '@fortawesome/free-solid-svg-icons';
 import { ThreeDots } from 'react-loading-icons';
+import { useRouter } from "next/router";
 
 export default function Form() {
   const toast = useToast();
+  const router = useRouter();
 
   const [link, setLink] = useState("");
   const [published, setPub] = useState(false);
@@ -62,6 +63,12 @@ export default function Form() {
       const PeerJs = (await import("peerjs")).default;
     };
     fn();
+
+    window.addEventListener("beforeunload", (ev) => 
+    {  
+        ev.preventDefault();
+        return ev.returnValue = 'Are you sure you want to close?';
+    }); 
   }, []);
 
   const publish = (metaData) => {
@@ -157,6 +164,35 @@ export default function Form() {
   const csvHeaders = choices.map((field) => {
     return {label: field, key: field}
   });
+
+  const exit = () => {
+    let today = new Date();
+    let dd = String(today.getDate()).padStart(2, '0');
+    let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    let yyyy = today.getFullYear();
+    today = mm + '/' + dd + '/' + yyyy;
+
+    let raw = {name: metaData.name, date: today, data: resData};
+    let curr = localStorage.getItem('history');
+
+    if (curr !== null){
+      let arr = JSON.parse(curr);
+      arr.push(raw);
+      localStorage.setItem('history', JSON.stringify(arr));
+    }
+    else {
+      localStorage.setItem('history', JSON.stringify([raw]));
+    }
+
+    toast({
+      title: "Form Saved",
+      description: "Your form was succesfully saved!",
+      status: "success",
+      isClosable: true,
+    })
+
+    router.push('/history')
+  }
 
   return (
     <div className = "flex">
@@ -279,7 +315,7 @@ export default function Form() {
       <Box m="10">
         {published && loading && (
           <Heading size="lg" align="center">
-            Creating Poll...
+            Creating Form...
           </Heading>
         )}
         {published && !loading && (
@@ -302,7 +338,7 @@ export default function Form() {
             <p>{link}</p>
 
             <Button disabled = {sharing} leftIcon={sharing ? <></> :<FontAwesomeIcon icon={faShareAlt}/>} onClick = {() => share({...resData})} colorScheme="teal" mt={5} mr={5}>
-              {sharing ? <ThreeDots width = {50} /> : <>Share Data</>}
+              {sharing ? <ThreeDots width = {50} /> : <>Share</>}
             </Button>
 
             <CSVLink 
@@ -310,10 +346,14 @@ export default function Form() {
               headers = {csvHeaders}
               filename = {`QR Tools - ${metaData.name}.csv`}
             >
-              <Button leftIcon={<FontAwesomeIcon icon={faDownload}/>} colorScheme="teal" mt={5}>
-                Download Data
+              <Button leftIcon={<FontAwesomeIcon icon={faDownload}/>} colorScheme="teal" mt={5} mr = {5}>
+                Download
               </Button>
             </CSVLink>
+
+            <Button onClick = {exit} leftIcon={<FontAwesomeIcon icon={faSave}/>} colorScheme="green" mt={5}>
+              Save & Exit
+            </Button>
           </Box>
         )}
       </Box>

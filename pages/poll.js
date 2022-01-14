@@ -113,6 +113,12 @@ export default function Poll() {
       const PeerJs = (await import("peerjs")).default;
     };
     fn();
+    
+    window.addEventListener("beforeunload", (ev) => 
+    {  
+        ev.preventDefault();
+        return ev.returnValue = 'Are you sure you want to close?';
+    });
   }, []);
 
   const publish = (metaData) => {
@@ -393,7 +399,7 @@ export default function Poll() {
 
             <p>{link}</p>
 
-            <Button disabled = {sharing} leftIcon={sharing ? <></> :<FontAwesomeIcon icon={faShareAlt}/>} onClick = {() => share({...resData})} colorScheme="teal" mt={5} mr={5}>
+            <Button disabled = {sharing} leftIcon={sharing ? <></> :<FontAwesomeIcon icon={faShareAlt}/>} onClick = {() => share(resData)} colorScheme="teal" mt={5} mr={5}>
               {sharing ? <ThreeDots width = {50} /> : <>Share</>}
             </Button>
 
