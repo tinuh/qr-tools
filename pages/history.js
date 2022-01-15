@@ -112,8 +112,6 @@ export default function History() {
 	const view = (data) => {
 		setModalData(data);
 		onOpen();
-
-
 	}
 
   return (

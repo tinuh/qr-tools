@@ -25,7 +25,7 @@ import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { CSVLink } from "react-csv";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faShareAlt, faSave, faDownload } from '@fortawesome/free-solid-svg-icons';
+import { faShareAlt, faSave, faDownload, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { ThreeDots } from 'react-loading-icons';
 import { useRouter } from "next/router";
 
@@ -230,7 +230,7 @@ export default function Form() {
                       onClick={addChoice}
                       disabled={published || watchAll.type === "free"}
                     >
-                      +
+                      <FontAwesomeIcon icon={faPlus} />
                     </Button>
                   </Tooltip>
                 </div>
@@ -264,7 +264,7 @@ export default function Form() {
                           onClick={() => deleteChoice(key)}
                           colorScheme="red"
                         >
-                          X
+                          <FontAwesomeIcon icon={faTrash}/>
                         </Button>
                       </Tooltip>
                     </div>

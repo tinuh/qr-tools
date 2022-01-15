@@ -22,8 +22,7 @@ import { motion } from "framer-motion";
 import { Bar, Pie } from "react-chartjs-2";
 import { CSVLink } from "react-csv";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSave, faShareAlt } from '@fortawesome/free-solid-svg-icons';
-import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { faSave, faShareAlt, faDownload, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ThreeDots } from 'react-loading-icons';
 import { useRouter } from "next/router";
 
@@ -294,7 +293,7 @@ export default function Poll() {
                   onClick={addChoice}
                   disabled={published || watchAll.type === "free"}
                 >
-                  +
+                  <FontAwesomeIcon icon = {faPlus} />
                 </Button>
               </Tooltip>
             </div>
@@ -325,7 +324,7 @@ export default function Poll() {
                           onClick={() => deleteChoice(key)}
                           colorScheme="red"
                         >
-                          X
+                          <FontAwesomeIcon icon = {faTrash} />
                         </Button>
                       </Tooltip>
                     </div>
