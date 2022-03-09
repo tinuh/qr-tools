@@ -26,7 +26,7 @@ export default function FooterComponent() {
     >
       <Flex align="center" direction={{ base: "column", md: "row" }}>
         <Text m={2} color="gray.400">&copy; 2021&nbsp;
-          <Link isExternal href="https://tinu.tech">
+          <Link isExternal href="https://linkaiwu.com">
               Tinu Vanapamula
           </Link>
         </Text>

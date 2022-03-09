@@ -34,6 +34,20 @@ export default function Home() {
                 Realtime QR Tools utilizing p2p connections
             </Heading>
           </motion.div>
+          <Link href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" passHref> {/** linkai was here :) */}
+              <Button
+                my = {8}
+                size = "lg"
+                bgGradient="linear(to-tl,red.500,teal.500)"
+                _hover={{
+                  bgGradient: "linear(to-tl,red.500,teal.500)",
+                }}
+                _active={{
+                  bgGradient: "linear(to-tl,red.500,teal.500)",
+                }}
+              >Get started today</Button>
+          </Link>
+          {/*
           <Link href="/poll" passHref>
               <Button
                 my = {8}
@@ -47,6 +61,7 @@ export default function Home() {
                 }}
               >Get started today</Button>
           </Link>
+          */}
       </Box>
 
       <Container maxW="container.lg" p={12}>
