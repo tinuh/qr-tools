@@ -34,20 +34,6 @@ export default function Home() {
                 Realtime QR Tools utilizing p2p connections
             </Heading>
           </motion.div>
-          <Link href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" passHref> {/** linkai was here :) */}
-              <Button
-                my = {8}
-                size = "lg"
-                bgGradient="linear(to-tl,red.500,teal.500)"
-                _hover={{
-                  bgGradient: "linear(to-tl,red.500,teal.500)",
-                }}
-                _active={{
-                  bgGradient: "linear(to-tl,red.500,teal.500)",
-                }}
-              >Get started today</Button>
-          </Link>
-          {/*
           <Link href="/poll" passHref>
               <Button
                 my = {8}
@@ -61,7 +47,6 @@ export default function Home() {
                 }}
               >Get started today</Button>
           </Link>
-          */}
       </Box>
 
       <Container maxW="container.lg" p={12}>
@@ -73,7 +58,7 @@ export default function Home() {
           >
             <Box>
                 <Center>
-                  <Image m={4} src='https://pollster.ink/images/create.svg' alt="create" h={48}/>
+                  <Image m={4} src='https://pollster.tinu.tech/images/create.svg' alt="create" h={48}/>
                 </Center>
                 <Heading as="h3" size="lg" my={2}>For everyone, and anyone.</Heading>
                 <Text fontSize="lg">
@@ -88,7 +73,7 @@ export default function Home() {
           >
             <Box>
                 <Center>
-                    <Image m={4} src='https://pollster.ink/images/pwa.svg' alt="create" h={48}/>
+                    <Image m={4} src='https://pollster.tinu.tech/images/pwa.svg' alt="create" h={48}/>
                 </Center>
                 <Heading as="h3" size="lg" my={2}>Use QR Tools on any device!</Heading>
                 <Text fontSize="lg">
